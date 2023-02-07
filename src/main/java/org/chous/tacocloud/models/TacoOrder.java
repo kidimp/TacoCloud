@@ -8,17 +8,21 @@ import java.util.ArrayList;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
+@Table
 public class TacoOrder implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
     private long id;
 
     private Date placedAt = new Date();

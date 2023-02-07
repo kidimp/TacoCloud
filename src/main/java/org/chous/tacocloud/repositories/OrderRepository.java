@@ -1,12 +1,8 @@
 package org.chous.tacocloud.repositories;
 
 import org.chous.tacocloud.models.TacoOrder;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
-
-
-public interface OrderRepository {
-
-    TacoOrder save(TacoOrder order);
+public interface OrderRepository extends CrudRepository<TacoOrder, Long> {
 
 }

@@ -1,12 +1,12 @@
 package org.chous.tacocloud.repositories;
+
 import java.sql.Types;
 import java.util.*;
 
-import org.chous.tacocloud.models.IngredientRef;
+import org.chous.tacocloud.models.Ingredient;
 import org.chous.tacocloud.models.Taco;
 import org.chous.tacocloud.models.TacoOrder;
 import org.springframework.asm.Type;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -60,7 +60,7 @@ public class JdbcOrderRepository implements OrderRepository {
         order.setId(orderId);
 
         List<Taco> tacos = order.getTacos();
-        int i=0;
+        int i = 0;
         for (Taco taco : tacos) {
             saveTaco(orderId, i++, taco);
         }
@@ -97,68 +97,15 @@ public class JdbcOrderRepository implements OrderRepository {
         return tacoId;
     }
 
-    private void saveIngredientRefs(
-            long tacoId, List<IngredientRef> ingredientRefs) {
+    private void saveIngredientRefs(long tacoId, List<Ingredient> ingredients) {
         int key = 0;
-        for (IngredientRef ingredientRef : ingredientRefs) {
+        for (Ingredient ing : ingredients) {
             jdbcOperations.update(
                     "insert into Ingredient_Ref (ingredient, taco, taco_key) "
                             + "values (?, ?, ?)",
-                    ingredientRef.getIngredient(), tacoId, key++);
+                    ing.getName(), tacoId, key++);
         }
     }
 
-//    @Override
-//    public Optional<TacoOrder> findById(Long id) {
-//        try {
-//            TacoOrder order = jdbcOperations.queryForObject(
-//                    "select id, delivery_name, delivery_street, delivery_city, "
-//                            + "delivery_state, delivery_zip, cc_number, cc_expiration, "
-//                            + "cc_cvv, placed_at from Taco_Order where id=?",
-//                    (row, rowNum) -> {
-//                        TacoOrder tacoOrder = new TacoOrder();
-//                        tacoOrder.setId(row.getLong("id"));
-//                        tacoOrder.setDeliveryName(row.getString("delivery_name"));
-//                        tacoOrder.setDeliveryStreet(row.getString("delivery_street"));
-//                        tacoOrder.setDeliveryCity(row.getString("delivery_city"));
-//                        tacoOrder.setDeliveryState(row.getString("delivery_state"));
-//                        tacoOrder.setDeliveryZip(row.getString("delivery_zip"));
-//                        tacoOrder.setCcNumber(row.getString("cc_number"));
-//                        tacoOrder.setCcExpiration(row.getString("cc_expiration"));
-//                        tacoOrder.setCcCVV(row.getString("cc_cvv"));
-//                        tacoOrder.setPlacedAt(new Date(row.getTimestamp("placed_at").getTime()));
-//                        tacoOrder.setTacos(findTacosByOrderId(row.getLong("id")));
-//                        return tacoOrder;
-//                    }, id);
-//            return Optional.of(order);
-//        } catch (IncorrectResultSizeDataAccessException e) {
-//            return Optional.empty();
-//        }
-//    }
-//
-//    private List<Taco> findTacosByOrderId(long orderId) {
-//        return jdbcOperations.query(
-//                "select id, name, created_at from Taco "
-//                        + "where taco_order=? order by taco_order_key",
-//                (row, rowNum) -> {
-//                    Taco taco = new Taco();
-//                    taco.setId(row.getLong("id"));
-//                    taco.setName(row.getString("name"));
-//                    taco.setCreatedAt(new Date(row.getTimestamp("created_at").getTime()));
-//                    taco.setIngredients(findIngredientsByTacoId(row.getLong("id")));
-//                    return taco;
-//                },
-//                orderId);
-//    }
-//
-//    private List<IngredientRef> findIngredientsByTacoId(long tacoId) {
-//        return jdbcOperations.query(
-//                "select ingredient from Ingredient_Ref "
-//                        + "where taco = ? order by taco_key",
-//                (row, rowNum) -> {
-//                    return new IngredientRef(row.getString("ingredient"));
-//                },
-//                tacoId);
-//    }
 
 }

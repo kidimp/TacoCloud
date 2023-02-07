@@ -1,5 +1,6 @@
 package org.chous.tacocloud.models;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Pattern;
 @Data
 public class TacoOrder implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private long id;
@@ -39,7 +41,7 @@ public class TacoOrder implements Serializable {
     @CreditCardNumber(message = "Not a valid credit card number")
     private String ccNumber;
 
-    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$", message = "Must be formatted MM/YY")
+    @Pattern(regexp = "^(0[1-9]|1[0-2])(/)([2-9]\\d)$", message = "Must be formatted MM/YY")
     private String ccExpiration;
 
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")

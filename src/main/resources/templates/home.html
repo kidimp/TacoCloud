@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Taco Cloud</title>
 </head>
@@ -10,7 +8,10 @@
 <body>
 <h1>Welcome to...</h1>
 <img th:src="@{/images/TacoCloud.png}"/>
-<br>
-<a href="/design" style="margin-left: 100px">To design page</a>
+<form method="POST" th:action="@{/logout}" id="logoutForm">
+    <input type="submit" value="Logout"/>
+</form>
+
+<a th:href="@{/design}" id="design">Design a taco</a>
 </body>
 </html>

@@ -39,10 +39,7 @@ public class DesignTacoController {
     private final UserRepository userRepo;
 
     @Autowired
-    public DesignTacoController(
-            IngredientRepository ingredientRepo,
-            TacoRepository tacoRepo,
-            UserRepository userRepo) {
+    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo, UserRepository userRepo) {
         this.ingredientRepo = ingredientRepo;
         this.tacoRepo = tacoRepo;
         this.userRepo = userRepo;
@@ -55,8 +52,7 @@ public class DesignTacoController {
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
+            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
     }
 

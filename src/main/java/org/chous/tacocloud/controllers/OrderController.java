@@ -1,10 +1,14 @@
 package org.chous.tacocloud.controllers;
 
+import org.chous.tacocloud.models.OrderProps;
 import org.chous.tacocloud.models.TacoOrder;
 import org.chous.tacocloud.models.User;
 import org.chous.tacocloud.repositories.OrderRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
@@ -17,10 +21,13 @@ import javax.validation.Valid;
 public class OrderController {
 
     private final OrderRepository orderRepo;
+    private final OrderProps props;
 
-    public OrderController(OrderRepository orderRepo) {
+    public OrderController(OrderRepository orderRepo, OrderProps props) {
         this.orderRepo = orderRepo;
+        this.props = props;
     }
+
 
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal User user, @ModelAttribute TacoOrder order) {
@@ -43,6 +50,7 @@ public class OrderController {
         return "orderForm";
     }
 
+
     @PostMapping
     public String processOrder(@Valid TacoOrder order, Errors errors,
                                SessionStatus sessionStatus,
@@ -59,5 +67,36 @@ public class OrderController {
 
         return "redirect:/";
     }
+
+
+    @GetMapping
+    public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
+
+        Pageable pageable = PageRequest.of(0, props.getPageSize());
+        model.addAttribute("orders", orderRepo.findByUserOrderByPlacedAtDesc(user, pageable));
+
+        return "orderList";
+    }
+
+    /*
+  @GetMapping
+  public String ordersForUser(
+      @AuthenticationPrincipal User user, Model model) {
+    Pageable pageable = PageRequest.of(0, 20);
+    model.addAttribute("orders",
+        orderRepo.findByUserOrderByPlacedAtDesc(user, pageable));
+    return "orderList";
+  }
+   */
+
+  /*
+  @GetMapping
+  public String ordersForUser(
+      @AuthenticationPrincipal User user, Model model) {
+    model.addAttribute("orders",
+        orderRepo.findByUserOrderByPlacedAtDesc(user));
+    return "orderList";
+  }
+   */
 
 }
